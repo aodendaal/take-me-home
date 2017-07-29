@@ -31,7 +31,10 @@ public class Player : MonoBehaviour {
             if (Physics.Raycast(ray, out hitInfo, 100f, 1 << 5))
             {
                 var s = hitInfo.collider.gameObject.GetComponent<SwitchBehaviour>();
-                s.Toggle();
+
+                LeanTween
+                    .move(gameObject, hitInfo.collider.transform.Find("StandNode").position, 1f)
+                    .setOnComplete(() => s.Toggle());
             }
         }
     }

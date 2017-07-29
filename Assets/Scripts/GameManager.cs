@@ -29,7 +29,8 @@ public class GameManager : MonoBehaviour {
 
     float totalPower = 100f;
     public float UsedPower { get; private set; }
-    
+
+    bool isPaused = true;
     float totalTime = 60f;
     float remainingTime = 0f;
 
@@ -55,13 +56,16 @@ public class GameManager : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {        
+    void Update() {
 
-        remainingTime -= Time.deltaTime * multiplier * ((IsBoosted) ? 2f : 1f);
+        if (!isPaused)
+        {
+            remainingTime -= Time.deltaTime * multiplier * ((IsBoosted) ? 2f : 1f);
 
-        homeSlider.value = (totalTime - remainingTime) / totalTime;
+            homeSlider.value = (totalTime - remainingTime) / totalTime;
 
-        CheckVictory();
+            CheckVictory();
+        }
 	}
 
     private void CheckVictory()
@@ -116,6 +120,7 @@ public class GameManager : MonoBehaviour {
     {
         introPanel.SetActive(false);
         particleSystem.Play();
+        isPaused = false;
     }
 
     public void Click_RestartGame()
