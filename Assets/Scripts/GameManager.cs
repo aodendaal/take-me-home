@@ -37,19 +37,20 @@ public class GameManager : MonoBehaviour {
     float multiplier = 0f;
     public bool IsBoosted { get; set; }
 
-    ParticleSystem particleSystem;
+    ParticleSystem[] particleSystems;
 
     private void Awake()
     {
         UsedPower = 0;
-        particleSystem = FindObjectOfType<ParticleSystem>();
+        particleSystems = FindObjectsOfType<ParticleSystem>();
         
     }
 
     // Use this for initialization
     void Start () {
         introPanel.SetActive(true);
-        particleSystem.Pause();
+
+        PauseParticles();
 
         remainingTime = totalTime;    
         
@@ -73,7 +74,7 @@ public class GameManager : MonoBehaviour {
         if (remainingTime <= 0f)
         {
             victoryPanel.SetActive(true);
-            particleSystem.Pause();
+            PauseParticles();
         }
     }
 
@@ -95,32 +96,50 @@ public class GameManager : MonoBehaviour {
         {
             multiplier = 1f;
             powerFill.color = goodColor;
-            if (particleSystem.isPaused) particleSystem.Play();
+            if (particleSystems[0].isPaused) PlayParticles();
         }
         else if (powerSlider.value > 0.5f)
         {
             multiplier = 0.5f;
             powerFill.color = okColor;
-            if (particleSystem.isPaused) particleSystem.Play();
+            if (particleSystems[0].isPaused) PlayParticles();
         }
         else if (powerSlider.value > 0.25f)
         {
             multiplier = 0.33f;
             powerFill.color = badColor;
-            if (particleSystem.isPaused) particleSystem.Play();
+            if (particleSystems[0].isPaused) PlayParticles();
         }
         else
         {
             powerFill.color = offColor;
-            if (!particleSystem.isPaused) particleSystem.Pause();
+            if (!particleSystems[0].isPaused) PauseParticles();
+        }
+    }
+
+    private void PauseParticles()
+    {
+        foreach (var p in particleSystems)
+        {
+            p.Pause();
+        }
+    }
+
+    private void PlayParticles()
+    {
+        foreach (var p in particleSystems)
+        {
+            p.Play();
         }
     }
 
     public void Click_StartGame()
     {
         introPanel.SetActive(false);
-        particleSystem.Play();
+        PlayParticles();
         isPaused = false;
+
+        GameObject.Find("LightConsole").GetComponent<Lightswitch>().TurnOn(true);
     }
 
     public void Click_RestartGame()

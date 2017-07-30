@@ -12,7 +12,7 @@ public class Lightswitch : SwitchBehaviour {
 	// Use this for initialization
 	void Start () {
         PowerConsumption = 15f;
-        TurnOn(true);
+        TurnOff(true);
     }
 	
 	// Update is called once per frame
@@ -36,7 +36,7 @@ public class Lightswitch : SwitchBehaviour {
 
     public override void TurnOff(bool noSound = false)
     {
-        base.TurnOff();
+        base.TurnOff(noSound);
 
         lighting.enabled = false;
         foreach (var light in emergencyLighting)

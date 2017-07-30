@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class Boosterswitch : SwitchBehaviour {
 
-    ParticleSystem particleSystem;
+    ParticleSystem[] particleSystems;
 
     // Use this for initialization
     void Start()
     {
-        particleSystem = FindObjectOfType<ParticleSystem>();
+        particleSystems = FindObjectsOfType<ParticleSystem>();
 
         PowerConsumption = 95f;
         TurnOff(true);
@@ -28,9 +28,13 @@ public class Boosterswitch : SwitchBehaviour {
 
         if (IsOn)
         {
-            particleSystem.Play();
-            var main = particleSystem.main;
-            main.simulationSpeed = 5f;
+            foreach (var p in particleSystems)
+            {
+                p.Play();
+                var main = p.main;
+                main.simulationSpeed = 5f;
+            }
+
             gameManager.IsBoosted = true;
         }
     }
@@ -39,8 +43,11 @@ public class Boosterswitch : SwitchBehaviour {
     {
         base.TurnOff(noSound);
 
-        var main = particleSystem.main;
-        main.simulationSpeed = 1f;
+        foreach (var p in particleSystems)
+        {
+            var main = p.main;
+            main.simulationSpeed = 1f;
+        }
 
         gameManager.IsBoosted = false;
     }

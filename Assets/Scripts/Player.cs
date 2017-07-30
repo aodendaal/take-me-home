@@ -32,9 +32,18 @@ public class Player : MonoBehaviour {
             {
                 var s = hitInfo.collider.gameObject.GetComponent<SwitchBehaviour>();
 
-                LeanTween
-                    .move(gameObject, hitInfo.collider.transform.Find("StandNode").position, 1f)
-                    .setOnComplete(() => s.Toggle());
+                var target = hitInfo.collider.transform.Find("StandNode").position;
+
+                if (transform.position != target)
+                {
+                    LeanTween
+                        .move(gameObject, target, 1f)
+                        .setOnComplete(() => s.Toggle());
+                }
+                else
+                {
+                    s.Toggle();
+                }
             }
         }
     }
